@@ -1,4 +1,4 @@
-baseURL = 'https://example.org/'
+baseURL = 'https://Yodasama.github.io/'
 locale = 'zh-cn'
 title = 'Yida Blog'
 theme = 'anatole'
@@ -7,7 +7,7 @@ enableEmoji = true
 enableRobotsTXT = true
 
 [params]
-  title = "Yida Blog"
+  title = "Yodasama"
   author = "Yida"
   description = "记录技术、研究和日常思考"
   profilePicture = "images/profile.jpg"
@@ -25,7 +25,7 @@ enableRobotsTXT = true
 [[params.socialIcons]]
   icon = "fa-solid fa-envelope"
   title = "Email"
-  url = "mailto:mail@example.com"
+  url = "mailto:yidaaa2269@163.com"
 
 [[menu.main]]
   name = "Home"
