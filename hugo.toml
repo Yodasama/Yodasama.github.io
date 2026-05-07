@@ -1,0 +1,56 @@
+baseURL = 'https://example.org/'
+locale = 'zh-cn'
+title = 'Yida Blog'
+theme = 'anatole'
+summarylength = 20
+enableEmoji = true
+enableRobotsTXT = true
+
+[params]
+  title = "Yida Blog"
+  author = "Yida"
+  description = "记录技术、研究和日常思考"
+  profilePicture = "images/profile.jpg"
+  mainSections = ["posts"]
+  indexDateFormat = "2006-01-02"
+  listDateFormat = "2006-01-02"
+  singleDateFormat = "2006-01-02"
+  reversepagetitle = true
+
+[[params.socialIcons]]
+  icon = "fa-brands fa-github"
+  title = "GitHub"
+  url = "https://github.com/"
+
+[[params.socialIcons]]
+  icon = "fa-solid fa-envelope"
+  title = "Email"
+  url = "mailto:mail@example.com"
+
+[[menu.main]]
+  name = "Home"
+  identifier = "home"
+  weight = 100
+  url = "/"
+
+[[menu.main]]
+  name = "Posts"
+  identifier = "posts"
+  weight = 200
+  url = "/posts/"
+
+[[menu.main]]
+  name = "About"
+  identifier = "about"
+  weight = 300
+  url = "/about/"
+
+[taxonomies]
+  category = "categories"
+  series = "series"
+  tag = "tags"
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
