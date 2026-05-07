@@ -83,3 +83,67 @@
 .site-search__tag {
   margin-left: 0.5rem;
 }
+
+.post .post__content {
+  line-height: 1.85;
+}
+
+.post .post__content h1,
+.post .post__content h2,
+.post .post__content h3 {
+  letter-spacing: 0;
+}
+
+.post .post__content h1 {
+  font-size: 3rem;
+}
+
+.post .post__content h2 {
+  font-size: 2.35rem;
+}
+
+.post .post__content h3 {
+  font-size: 2rem;
+}
+
+.post .post__content p {
+  margin: 1rem 0;
+}
+
+.post .post__content pre {
+  background: #fffdf8 !important;
+  border: 1px solid #e5d8c7;
+  border-radius: 8px;
+  color: #111 !important;
+  line-height: 1.55;
+  margin: 1.2rem 0 1.8rem;
+  overflow-x: auto;
+  padding: 1.05rem 1.25rem;
+}
+
+.post .post__content pre code,
+.post .post__content pre code span {
+  background: transparent !important;
+  color: #111 !important;
+  font-family: Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 1.45rem;
+}
+
+.post .post__content .highlight {
+  background: transparent !important;
+}
+
+@media screen and (max-width: 960px) {
+  .post .post__content h1 {
+    font-size: 2.5rem;
+  }
+
+  .post .post__content h2 {
+    font-size: 2rem;
+  }
+
+  .post .post__content pre {
+    border-radius: 7px;
+    padding: 0.9rem 1rem;
+  }
+}
