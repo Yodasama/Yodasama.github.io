@@ -1,0 +1,20 @@
+{{ define "main" }}
+  <div class="post animated fadeInDown">
+    <div class="post__content">
+      <h1>{{ .Title }}</h1>
+      <div class="site-search" data-index-url="{{ "index.json" | relURL }}">
+        <label class="site-search__label" for="search-query">Search posts</label>
+        <input
+          id="search-query"
+          class="site-search__input"
+          type="search"
+          name="q"
+          placeholder="Search by title, content, or tag"
+          autocomplete="off"
+        />
+        <p class="site-search__status" aria-live="polite"></p>
+        <div class="site-search__results"></div>
+      </div>
+    </div>
+  </div>
+{{ end }}

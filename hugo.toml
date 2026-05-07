@@ -6,15 +6,21 @@ summarylength = 20
 enableEmoji = true
 enableRobotsTXT = true
 
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+
 [params]
   title = "Yodasama"
   author = "Yida"
   description = "记录技术、研究和日常思考"
   profilePicture = "images/panda.JPG"
   mainSections = ["posts"]
+  customCss = ["css/custom.css"]
+  customJs = ["js/search.js"]
   indexDateFormat = "2006-01-02"
   listDateFormat = "2006-01-02"
   singleDateFormat = "2006-01-02"
+  disableTitleCapitalization = true
   reversepagetitle = true
 
 [[params.socialIcons]]
