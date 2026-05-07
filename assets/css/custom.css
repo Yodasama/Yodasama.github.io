@@ -1,18 +1,36 @@
 html,
+.html,
 .body {
   min-height: 100%;
 }
 
+.html {
+  background: #070a10 !important;
+}
+
 .body {
   background:
-    linear-gradient(rgba(7, 10, 16, 0.34), rgba(7, 10, 16, 0.54)),
+    linear-gradient(rgba(7, 10, 16, 0.22), rgba(7, 10, 16, 0.38)),
     url("/images/background.jpg") center center / cover fixed no-repeat !important;
 }
 
+.wrapper,
+.wrapper__main {
+  background: transparent !important;
+}
+
 .header {
-  background: rgba(9, 13, 20, 0.58) !important;
+  background: rgba(9, 13, 20, 0.32) !important;
   backdrop-filter: blur(14px);
   border-bottom-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+.nav__list {
+  background: transparent !important;
+}
+
+.nav__list--end {
+  background: transparent !important;
 }
 
 .nav a,
@@ -48,8 +66,8 @@ html,
 
 .post,
 .archive {
-  background: rgba(255, 255, 255, 0.9) !important;
-  border: 1px solid rgba(255, 255, 255, 0.34);
+  background: rgba(255, 255, 255, 0.72) !important;
+  border: 1px solid rgba(255, 255, 255, 0.26);
   border-radius: 12px;
   box-shadow: 0 18px 50px rgba(0, 0, 0, 0.24);
   padding: 0.7rem 1.2rem;
