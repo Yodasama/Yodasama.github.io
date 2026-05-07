@@ -10,7 +10,7 @@ enableRobotsTXT = true
   title = "Yodasama"
   author = "Yida"
   description = "记录技术、研究和日常思考"
-  profilePicture = "images/profile.jpg"
+  profilePicture = "images/panda.JPG"
   mainSections = ["posts"]
   indexDateFormat = "2006-01-02"
   listDateFormat = "2006-01-02"
@@ -20,7 +20,7 @@ enableRobotsTXT = true
 [[params.socialIcons]]
   icon = "fa-brands fa-github"
   title = "GitHub"
-  url = "https://github.com/"
+  url = "https://github.com/Yodasama"
 
 [[params.socialIcons]]
   icon = "fa-solid fa-envelope"
@@ -46,8 +46,6 @@ enableRobotsTXT = true
   url = "/about/"
 
 [taxonomies]
-  category = "categories"
-  series = "series"
   tag = "tags"
 
 [markup]
