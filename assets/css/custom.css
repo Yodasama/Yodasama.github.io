@@ -1,3 +1,60 @@
+html,
+.body {
+  min-height: 100%;
+}
+
+.body {
+  background:
+    linear-gradient(rgba(7, 10, 16, 0.34), rgba(7, 10, 16, 0.54)),
+    url("/images/background.jpg") center center / cover fixed no-repeat !important;
+}
+
+.header {
+  background: rgba(9, 13, 20, 0.58) !important;
+  backdrop-filter: blur(14px);
+  border-bottom-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+.nav a,
+.themeswitch a {
+  color: rgba(255, 255, 255, 0.86) !important;
+}
+
+.nav a:hover,
+.themeswitch a:hover {
+  color: #ffffff !important;
+}
+
+.sidebar {
+  background: transparent !important;
+  border-right-color: rgba(255, 255, 255, 0.14) !important;
+}
+
+.sidebar__content,
+.footer__sidebar {
+  color: rgba(255, 255, 255, 0.86);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+.sidebar__introduction-title a,
+.sidebar__list a,
+.footer__sidebar a {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.sidebar__introduction-description {
+  color: rgba(255, 255, 255, 0.76);
+}
+
+.post,
+.archive {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  border-radius: 12px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.24);
+  padding: 0.7rem 1.2rem;
+}
+
 @media screen and (min-width: 961px) {
   .sidebar__content {
     justify-content: flex-start;
