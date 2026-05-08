@@ -1,8 +1,10 @@
 +++
-date = '2026-05-08T10:34:10+08:00'
+date = '2026-05-08T11:06:13+08:00'
 draft = false
-title = 'Security'
-tags = ['security']
+title = '网络安全面经'
+summary = '记录网安常用的面试题'
+tags = ['security','面经']
+toc = true
 
 +++
 
@@ -57,5 +59,6 @@ UNION SELECT 1, database();
 报错注入：updatexml() ；extractvalue()
 
 ```sql
+
 ```
 
