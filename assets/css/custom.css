@@ -1,20 +1,28 @@
 html,
 .html,
 .body {
+  height: auto;
   min-height: 100%;
 }
 
 .html {
-  background: #070a10 !important;
+  background:
+    linear-gradient(rgba(7, 10, 16, 0.22), rgba(7, 10, 16, 0.38)),
+    url("/images/background.jpg") center center / cover fixed no-repeat #070a10 !important;
 }
 
 .body {
   background:
     linear-gradient(rgba(7, 10, 16, 0.22), rgba(7, 10, 16, 0.38)),
     url("/images/background.jpg") center center / cover fixed no-repeat !important;
+  min-height: 100vh;
 }
 
-.wrapper,
+.wrapper {
+  background: transparent !important;
+  min-height: 100vh;
+}
+
 .wrapper__main {
   background: transparent !important;
 }
