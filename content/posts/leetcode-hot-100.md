@@ -1,0 +1,46 @@
++++
+date = '2026-05-07T19:47:55+08:00'
+draft = false
+title = 'Leetcode Hot 100'
+tags = ['code','题解']
+
++++
+
+### 两数之和
+
+```Python
+1.暴力破解法
+class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+      n = len(nums)
+      for i in range(n):
+        for j in range(i+1,n):
+          if nums[i] + nums[j] == target:
+            return [i,j]
+      return []
+时间复杂度：O(N^2)
+空间复杂度：O(1)
+
+2.哈希表法
+class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+      hashtable = dict()
+      for i,num in enumerate(nums):	#enumerate同时返回下标和值
+        if target - num in hashtable:
+          return [hashtable[target - num],i]
+        hashtable[nums[i]] = i
+       return []
+时间复杂度：O(N)
+空间复杂度：O(N)
+```
+
+
+
+### 字母异位词分组
+
+```Python
+1.排序
+# 异位词即字母、数量相同的单词，字母位置不同
+# 排序即将
+```
+

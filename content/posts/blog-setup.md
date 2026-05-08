@@ -4,6 +4,7 @@ draft = false
 title = 'Blog Setup'
 tags = ['Hugo','Blog']
 summary = '记录 Hugo + GitHub Pages 博客的内容管理、预览和发布流程。'
+toc = true
 +++
 
 ## 如何管理hugo + Github Pages的内容

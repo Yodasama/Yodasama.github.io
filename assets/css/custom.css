@@ -73,10 +73,95 @@ html,
   padding: 0.7rem 1.2rem;
 }
 
+.post-layout {
+  align-items: flex-start;
+  display: block;
+}
+
+.floating-toc {
+  display: none;
+}
+
+.inline-toc {
+  background: rgba(255, 255, 255, 0.52);
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  border-radius: 10px;
+  margin: 1.2rem 0 1.8rem;
+  padding: 1rem 1.2rem;
+}
+
+.inline-toc h3,
+.floating-toc h3 {
+  font-size: 1.45rem;
+  letter-spacing: 0;
+  margin: 0 0 0.7rem;
+  text-transform: none;
+}
+
+.inline-toc nav ul,
+.floating-toc nav ul {
+  list-style: none;
+  margin: 0;
+  padding-left: 0;
+}
+
+.inline-toc nav ul ul,
+.floating-toc nav ul ul {
+  margin-top: 0.35rem;
+  padding-left: 1rem;
+}
+
+.inline-toc li,
+.floating-toc li {
+  line-height: 1.45;
+  margin: 0.35rem 0;
+}
+
+.inline-toc a,
+.floating-toc a {
+  color: rgba(40, 45, 54, 0.86) !important;
+  font-size: 1.32rem;
+}
+
+.inline-toc a:hover,
+.floating-toc a:hover {
+  color: #111827 !important;
+}
+
 @media screen and (min-width: 961px) {
   .sidebar__content {
     justify-content: flex-start;
     padding-top: 16vh;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .post-layout--with-toc {
+    display: grid;
+    gap: 1.4rem;
+    grid-template-columns: minmax(0, 1fr) 220px;
+  }
+
+  .post-layout--with-toc .post {
+    margin-right: 0;
+  }
+
+  .post-layout--with-toc .inline-toc {
+    display: none;
+  }
+
+  .floating-toc {
+    background: rgba(255, 255, 255, 0.66);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 12px;
+    box-shadow: 0 16px 42px rgba(0, 0, 0, 0.2);
+    display: block;
+    margin: 30px 30px 30px 0;
+    max-height: calc(100vh - 110px);
+    overflow: auto;
+    padding: 1.1rem 1.2rem;
+    position: sticky;
+    top: 88px;
   }
 }
 
