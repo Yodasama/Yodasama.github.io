@@ -43,8 +43,19 @@ AND password = ''
 
 A：
 
-1. 联合查询注入： `union select database(),user()`
+联合查询注入： `union select database(),user()`
 
-2. 报错注入：updatexml() ；extractvalue()
+​	核心条件：UNION 前后的 SELECT 字段数量必须一致
 
-   `and updatexml(1,concat(0x7e,database()),1)`
+```sql
+SELECT id, username FROM users WHERE id = 1
+UNION SELECT 1, database();
+```
+
+
+
+报错注入：updatexml() ；extractvalue()
+
+```sql
+```
+
