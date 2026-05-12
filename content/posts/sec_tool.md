@@ -225,14 +225,99 @@ beacon有休眠 比msf更隐蔽
 
 ## WebShell管理
 
+### 菜刀
+
+payload的特征：
+
+1. php:
+2. `asp:<%eval request("caidao")%>`
+3. `asp.net:<%@PageLanguage="Jscript"%><%eval(Request.Item["caidao"],"unsafe");%>`
+
+数据包流量特征：
+
+1. 请求包中：ua头为百度
+2. 请求体中有eval，base64等特征字符
+3. 请求体中传递的payload为base64编码，并且是固定的
+
 ### AntSword
 
 `<?php eval($_POST['cmd']); ?>` 
 
-文件管理、数据库管理、命令执行。常用于PHP Webshell
+payload的特征：
+
+1. php中使用assert，eval执行
+2. asp使用eval执行
+3. jsp中使用的是Java类加载（ClassLoader），同时会带有base64编码解码等字符特征
+
+数据包流量特征：请求体中一定有@in_set("display_errors","0");@set_time_limit(0)开头，后面存在base64等字符
+
+### 冰蝎2.0
+
+payload特征：
+
+先base64加密，再经过AES对称加密全部代码，最后传输
+
+1. Accept字段：`Accept: text/html,image/gif, image/jpeg, *; q=.2, */*; q=.2`
+2. User agent字段：冰蝎内置了17种ua头，每次连接shell都会随机一个进行使用，如果发现历史流量中同一个IP访问URL的时候，命令了以下列表中的多个ua头，可以基本确定为冰蝎
+3. 默认情况下，请求头和响应头里会有Connection。`Connection: Keep-Alive`
+4. 密钥传递时URL参数，URI只有一个key-value型参数，Key是黑客给shell设置的密码，一般为10位以下字母和数字`?pass=[三位数字]`
+5. 传递的密钥：加密所使用的密钥长度为16位随机字符串，小写+数字组成
+
+### 冰蝎3.0
+
+payload特征：
+
+先base64加密，再经过AES对称加密全部代码，最后传输
+
+AES加密的密钥为`webshell连接密码的MD5的前16位，默认连接密码是"rebeyond"(即密钥是md5('rebeyond')[0:16]=e45e329feb5d925b)`
+
+Accept&Cache-Control
+
+```
+Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2
+Cache-Control: no-cache
+Pragma: no-cache
+User-Agent: java/1.8
+```
+
+Content-Type：该请求头是冰蝎3.0中写死的部分，除非反编译，不然很难修改
+
+```
+Content-Type: application/octet-stream
+```
+
+### 冰蝎4.0
+
+第一阶段：密钥协商
+1）攻击者通过 GET 或者 POST 方法，形如` http://127.0.0.1/shell.aspx?pass=645 `的请求服务器密钥；
+2）服务器使用随机数 MD5 的高16位作为密钥，存储到会话的 $_SESSION 变量中，并返回密钥给攻击者。
+第二阶段-加密传输
+1）客户端把待执行命令作为输入，利用 AES 算法或 XOR 运算进行加密，并发送至服务端；
+2）服务端接受密文后进行 AES 或 XOR 运算解密，执行相应的命令；
+3）执行结果通过AES加密后返回给攻击者。
+
+1. Accept字段：`Accept: application/json, text/javascript, */*; q=0.01`
+2. Content-Type：
+   1. PHP站点：Application/x-www-form-urlencoded
+   2. ASP站点：Application/octet-stream
+3. 流量特征连接密码：默认时，所有冰蝎4.* webshell都有“e45e329feb5d925b” 一串密钥。该密钥为连接密码32位md5值的前16位，默认连接密码rebeyond
 
 ### Godzilla
 
+1. cookie：在Cookie中有一个很明显的特征：最后有一个分号
 
+2. 响应体：从代码中可以看到会把一个32位的md5字符串按照一半拆分，分别放在base64编码的数据的前后两部分
+
+整个响应包的结构体征为：**md5前十六位+base64+md5后十六位**
+
+`72a9c691ccdaab98fL1tMGI4YTljO/5+/PlQm9MGV7lTjFUKUdfQMDL/j64wJ2UwYg==b4c4e1f6ddd2a488`
+
+3. 连接特征
+
+   1. 请求1：发送一段固定代码（payload），返回内容为空
+
+   1. 请求2：发送一段固定代码（test），返回内容为固定字符串，如下：`72a9c691ccdaab98fL1tMGI4YTljO/79NDQm7r9PZzBiOA==b4c4e1f6ddd2a488`，解密后即为**ok**。如果连接失败返回内容为空，且不发起请求3
+
+   1. 请求3：发送一段固定代码（getBacisInfo），返回内容为固定字符串（对应服务器信息）
 
 ## 内网渗透
