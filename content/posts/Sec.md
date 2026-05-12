@@ -8,7 +8,7 @@ toc = true
 
 +++
 
-### OWASP TOP 10
+## OWASP TOP 10
 
 #### Injection/注入
 
@@ -564,3 +564,20 @@ open("/var/www/uploads/../../etc/passwd")
 3. MFA多因素认证
 4. 强制修改默认密码
 5. IP限制
+
+## 信息收集
+
+### 子域名泛解析
+
+**原因：**将没有明确设置的子域名一律解析到一个IP地址，造成都能访问的假象
+
+ping一个不存在的域名 发现能解析时，说明使用了泛解析
+
+**解决方法：**
+
+IP黑名单：随机访问不存在的域名，通过返回结果分析是否存在泛解析。如果确定存在，使用脚本工具 OneForAll
+
+HTTP Host：DNS能解析，但是`Host:random.example.com` 返回404 说明不是真实业务
+
+
+

@@ -1,0 +1,279 @@
+.post .post__content {
+  --md-theme-color: hsl(0, 100%, 68%);
+  --md-theme-soft: hsl(0, 100%, 96%);
+  --md-theme-muted: hsl(0, 0%, 95%);
+  --md-text: #333333;
+  --md-text-strong: #111111;
+  --md-text-muted: #666666;
+  --md-serif: "EB Garamond", Georgia, "Noto Serif CJK SC", "Songti SC", "Source Han Serif SC", STSong, SimSun, serif;
+  --md-sans: "Poppins", -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Noto Sans CJK SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --md-mono: "Cascadia Code", "Sarasa Term SC", Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  color: var(--md-text);
+  font-family: var(--md-sans);
+  line-height: 2;
+  text-align: justify;
+}
+
+.post .post__content h1,
+.post .post__content h2,
+.post .post__content h3,
+.post .post__content h4,
+.post .post__content h5,
+.post .post__content h6 {
+  color: var(--md-text-strong);
+  letter-spacing: 0;
+}
+
+.post .post__content h1,
+.post .post__content h2 {
+  font-family: var(--md-serif);
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.post .post__content h1 {
+  font-size: 3.6rem;
+  font-weight: 900;
+  line-height: 1.45;
+  margin: 4.8rem auto 3.2rem;
+}
+
+.post .post__content h1::before,
+.post .post__content h1::after {
+  content: "";
+  display: block;
+  margin: 0.9rem auto;
+  width: min(50%, 20rem);
+}
+
+.post .post__content h1::before {
+  border-top: 1px dashed hsl(215, 100%, 65%);
+}
+
+.post .post__content h1::after {
+  border-top: 1px dashed var(--md-theme-color);
+}
+
+.post .post__content h2 {
+  font-size: 2.8rem;
+  font-weight: 800;
+  line-height: 1.5;
+  margin: 3.6rem auto 1.8rem;
+}
+
+.post .post__content h3 {
+  font-size: 2.15rem;
+  font-weight: 700;
+  line-height: 1.55;
+  margin: 2.4rem auto 1rem;
+}
+
+.post .post__content h4,
+.post .post__content h5,
+.post .post__content h6 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  line-height: 1.55;
+  margin: 2rem auto 0.8rem;
+}
+
+.post .post__content h3::before,
+.post .post__content h4::before,
+.post .post__content h5::before,
+.post .post__content h6::before {
+  background: var(--md-text);
+  border-radius: 5px;
+  color: #ffffff;
+  display: inline-block;
+  font-size: 1.05rem;
+  line-height: 1;
+  margin-right: 0.55rem;
+  padding: 0.28rem 0.38rem;
+  vertical-align: 0.18rem;
+}
+
+.post .post__content h3::before {
+  content: "H3";
+}
+
+.post .post__content h4::before {
+  content: "H4";
+}
+
+.post .post__content h5::before {
+  content: "H5";
+}
+
+.post .post__content h6::before {
+  content: "H6";
+}
+
+.post .post__content p {
+  line-height: 2;
+  margin: 1.1rem auto;
+}
+
+.post .post__content ul,
+.post .post__content ol {
+  line-height: 2;
+  margin: 1.1rem auto;
+}
+
+.post .post__content ol {
+  list-style: decimal-leading-zero;
+}
+
+.post .post__content ol ol {
+  list-style-type: lower-roman;
+}
+
+.post .post__content ul ul {
+  list-style-type: circle;
+}
+
+.post .post__content blockquote {
+  background: var(--md-theme-muted);
+  border: 1px solid rgba(153, 153, 153, 0.2);
+  border-left: 4px solid var(--md-theme-color);
+  border-radius: 6px;
+  box-shadow: 0 8px 16px 1px rgba(0, 0, 0, 0.1);
+  color: var(--md-text-muted);
+  font-family: var(--md-serif);
+  font-size: 1.75rem;
+  line-height: 1.75;
+  margin: 1.5rem auto;
+  padding: 1rem 1.25rem 1rem 1.6rem;
+}
+
+.post .post__content blockquote p {
+  color: inherit;
+  font: inherit;
+  margin: 0.65rem auto;
+}
+
+.post .post__content a {
+  border-bottom: 1px dashed var(--md-theme-color);
+  color: var(--md-theme-color) !important;
+  text-decoration: none;
+}
+
+.post .post__content a:hover {
+  border-bottom-color: #464343;
+  color: #464343 !important;
+}
+
+.post .post__content strong {
+  color: #000000;
+  font-weight: 800;
+}
+
+.post .post__content em {
+  color: #111111;
+  text-decoration: underline dotted;
+}
+
+.post .post__content mark {
+  background: #ffb3b3;
+  border-radius: 4px;
+  color: #111111;
+  padding: 0.1rem 0.35rem;
+}
+
+.post .post__content :not(pre) > code,
+.post .post__content kbd,
+.post .post__content samp {
+  background: var(--md-theme-soft);
+  border-radius: 4px;
+  color: var(--md-text);
+  font-family: var(--md-mono);
+  font-size: 0.92em;
+  padding: 0.16rem 0.38rem;
+}
+
+.post .post__content pre {
+  background: var(--md-theme-muted) !important;
+  border: 1px solid rgba(255, 102, 102, 0.35);
+  border-radius: 7px;
+  box-shadow: 0 8px 16px rgba(179, 179, 179, 0.2);
+  color: var(--md-text) !important;
+  line-height: 1.65;
+  margin: 1.5rem auto;
+  overflow-x: auto;
+  padding: 1.1rem 1.2rem;
+}
+
+.post .post__content pre code,
+.post .post__content pre code span {
+  background: transparent !important;
+  color: var(--md-text) !important;
+  font-family: var(--md-mono);
+  font-size: 1.35rem;
+}
+
+.post .post__content hr {
+  border: 0;
+  border-bottom: 1px solid var(--md-theme-color);
+  height: 1px;
+  margin: 2.2rem auto;
+  width: 50%;
+}
+
+.post .post__content table {
+  border-collapse: collapse;
+  box-shadow: 0 8px 16px rgba(179, 179, 179, 0.18);
+  display: table;
+  margin: 1.5rem auto;
+  overflow: hidden;
+  width: 100%;
+}
+
+.post .post__content th,
+.post .post__content td {
+  border: 1px solid rgba(255, 102, 102, 0.28) !important;
+  display: table-cell;
+  padding: 0.85rem 1rem;
+}
+
+.post .post__content th {
+  background: var(--md-theme-soft);
+  color: var(--md-text-strong);
+  font-weight: 700;
+}
+
+.post .post__content tbody tr:nth-child(even) {
+  background: #fcfcfc;
+}
+
+.post .post__content tbody tr:hover {
+  background: var(--md-theme-muted);
+}
+
+.post .post__content img {
+  border-radius: 6px;
+  box-shadow: 0 8px 16px 1px rgba(0, 0, 0, 0.1);
+  margin: 1.5rem auto;
+}
+
+@media screen and (max-width: 960px) {
+  .post .post__content {
+    text-align: left;
+  }
+
+  .post .post__content h1 {
+    font-size: 2.8rem;
+    margin: 3rem auto 2.2rem;
+  }
+
+  .post .post__content h2 {
+    font-size: 2.35rem;
+    margin: 2.6rem auto 1.4rem;
+  }
+
+  .post .post__content h3 {
+    font-size: 2rem;
+  }
+
+  .post .post__content blockquote {
+    font-size: 1.55rem;
+  }
+}
