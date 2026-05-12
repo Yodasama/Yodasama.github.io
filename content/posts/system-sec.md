@@ -3,7 +3,7 @@ date = '2026-05-12T16:20:41+08:00'
 draft = false
 title = '系统的安全加固'
 summary = 'Linux and Windows的安全加固'
-tags = [‘Security’,'面经']
+tags = ['Security', '面经']
 toc = true
 
 +++
