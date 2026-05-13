@@ -1,89 +1,70 @@
 {{ define "main" }}
-  <div
-    class="post {{ with .Site.Params.doNotLoadAnimations }}
-      .
-    {{ else }}
-      animated fadeInDown
-    {{ end }}"
-  >
-    <div class="post__content">
-      {{ .Content }}
-    </div>
+  {{ $animationClass := cond .Site.Params.doNotLoadAnimations "" "animated fadeInDown" }}
+  {{ $mainSections := .Site.Params.mainSections | default (slice "posts") }}
+  {{ $notes := where .Site.RegularPages "Type" "in" $mainSections }}
 
-    <!-- (Optional) Home
-          -- on top of `mainSections` content (aka posts) ;
-          -- as declared in content/_index.md
-
-          One can set `mainSections = [""]` and have the content/_index.md specified here
-      -->
-  </div>
-
-  {{ if .Params.mainSectionsTitle }}
-    <div
-      class="post {{ with .Site.Params.doNotLoadAnimations }}
-        .
-      {{ else }}
-        animated fadeInDown
-      {{ end }}"
-    >
-      <div class="post__content">
-        <h2>{{ .Params.mainSectionsTitle }}</h2>
-      </div>
-    </div>
-  {{ end }}
-
-  {{ $paginator := .Paginate (where .Site.RegularPages "Type" "in" .Site.Params.mainSections) }}
-  {{ range $paginator.Pages }}
-    <article
-      class="post post-card {{ with .Site.Params.doNotLoadAnimations }}
-        .
-      {{ else }}
-        animated fadeInDown
-      {{ end }}"
-    >
-      <a class="post-card__link" href="{{ .RelPermalink }}" aria-label="{{ .Title }}"></a>
-      <div class="post__content post-card__content">
-        {{ if (eq .Site.Params.disableTitleCapitalization true) }}
-          <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
-        {{ else }}
-          <h3><a href="{{ .RelPermalink }}">{{ upper .Title }}</a></h3>
-        {{ end }}
-        {{ with .Params.summary }}
-          <p>{{ . }}</p>
+  <div class="home-panel {{ $animationClass }}">
+    <section class="home-hero" aria-labelledby="home-hero-title">
+      <div>
+        <p class="home-hero__eyebrow">Notebook</p>
+        <h1 id="home-hero-title" class="home-hero__title">按主题整理笔记，把项目先留作后续展示。</h1>
+        {{ with .Content }}
+          <div class="home-hero__description">{{ . }}</div>
         {{ end }}
       </div>
+      <form class="home-search" action="{{ "search/" | relURL }}" method="get" role="search">
+        <label class="home-search__label" for="home-search-query">Search notes</label>
+        <input
+          id="home-search-query"
+          class="home-search__input"
+          type="search"
+          name="q"
+          placeholder="Search notes"
+          autocomplete="off"
+        />
+      </form>
+    </section>
 
-      <!--  -->
-      <div class="post__footer post-card__footer">
-        <em class="fas fa-calendar-day"></em>
-        <span class="post__footer-date"
-          >{{ if isset .Site.Params "indexdateformat" }}
-            {{ if .Site.Params.localizedDates }}
-              {{ time.Format .Site.Params.indexDateFormat .Date }}
-            {{ else }}
-              {{ .Date.Format .Site.Params.indexDateFormat }}
+    <section class="home-notes" id="latest-notes" aria-labelledby="latest-notes-title">
+      <div class="home-section-heading">
+        <h2 id="latest-notes-title">Latest Notes</h2>
+        <nav class="home-topic-list" aria-label="Note topics">
+          <a class="home-topic home-topic--active" href="#latest-notes">All</a>
+          {{ range $name, $taxonomy := .Site.Taxonomies.tags }}
+            <a class="home-topic" href="{{ printf "/tags/%s/" ($name | urlize) | relURL }}">{{ $name }}</a>
+          {{ end }}
+        </nav>
+      </div>
+
+      {{ range $index, $page := first 5 $notes }}
+        <article class="home-note-card {{ if eq $index 0 }}home-note-card--featured{{ end }}">
+          <a class="home-note-card__link" href="{{ .RelPermalink }}" aria-label="{{ .Title }}"></a>
+          <div class="home-note-card__meta">
+            {{ with .Params.tags }}
+              <span>{{ delimit . " · " }}</span>
             {{ end }}
-
+            <span>{{ .Date.Format ($.Site.Params.indexDateFormat | default "2006-01-02") }}</span>
+          </div>
+          <h3 class="home-note-card__title">
+            <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+          </h3>
+          {{ with .Params.summary }}
+            <p class="home-note-card__summary">{{ . }}</p>
           {{ else }}
-            {{ if .Site.Params.localizedDates }}
-              {{ time.Format "Mon, Jan 2, 2006" .Date }}
-            {{ else }}
-              {{ .Date.Format "Mon, Jan 2, 2006" }}
-            {{ end }}
+            <p class="home-note-card__summary">{{ .Summary | plainify | truncate 110 }}</p>
+          {{ end }}
+        </article>
+      {{ end }}
+    </section>
 
-          {{ end }}</span
-        >
-        {{ with .Page.Params.Categories }}
-          {{ partial "taxonomy/categories.html" . }}
-        {{ end }}
-
-        {{ with .Page.Params.Tags }}
-          {{ partial "taxonomy/tags.html" . }}
-        {{ end }}
+    <section class="home-projects-placeholder" aria-labelledby="home-projects-title">
+      <div class="home-section-heading">
+        <h2 id="home-projects-title">Projects</h2>
+        <span class="home-projects-placeholder__status">Coming later</span>
       </div>
-    </article>
-  {{ end }}
-  <div class="pagination">
-    {{ partial "pagination.html" . }}
+      <div class="home-projects-placeholder__body">
+        项目区先保留低调占位。等项目资料、截图或复盘更完整后，再升级成精选项目卡片。
+      </div>
+    </section>
   </div>
 {{ end }}

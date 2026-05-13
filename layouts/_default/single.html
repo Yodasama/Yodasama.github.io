@@ -1,61 +1,52 @@
 {{ define "main" }}
-  <div class="post-layout {{ if eq .Params.toc true }}post-layout--with-toc{{ end }}">
-    <article
-      class="post {{ with .Site.Params.doNotLoadAnimations }}
-        .
-      {{ else }}
-        animated fadeInDown
-      {{ end }}"
-    >
-      {{ if .Params.thumbnail }}
-        <div class="post__thumbnail-wrapper">
-          <img class="post__thumbnail" src="{{ .Params.thumbnail | relURL }}" alt="Thumbnail image" />
+  {{ if eq .Section "posts" }}
+    <div class="note-detail-layout {{ with .Site.Params.doNotLoadAnimations }}{{ else }}animated fadeInDown{{ end }}">
+      <aside class="article-toc-panel">
+        <div class="article-toc-panel__inner">
+          <a class="article-return-link" href="{{ "/" | relURL }}#latest-notes">返回首页</a>
+          <div class="article-toc-panel__label">On this page</div>
+          <div class="article-toc-panel__title">{{ .Title }}</div>
+          {{ if eq .Params.toc true }}
+            <nav class="article-toc-panel__nav" aria-label="Current article table of contents">
+              {{ .TableOfContents }}
+            </nav>
+          {{ else }}
+            <p class="article-toc-panel__empty">这篇文章没有开启目录。</p>
+          {{ end }}
         </div>
-      {{ end }}
-      <div class="post__content">
-        {{ if (eq .Site.Params.disableTitleCapitalization true) }}
-          <h1>{{ .Title }}</h1>
-        {{ else }}
-          <h1>{{ title .Title }}</h1>
+      </aside>
+
+      <article class="note-article">
+        {{ if .Params.thumbnail }}
+          <div class="post__thumbnail-wrapper">
+            <img class="post__thumbnail" src="{{ .Params.thumbnail | relURL }}" alt="Thumbnail image" />
+          </div>
         {{ end }}
-        {{ if or (eq .Type "post") (eq .Type .Site.Params.postSectionName) }}
-          <ul class="post__meta">
-            <li class="post__meta-item">
-              <em class="fas fa-calendar-day post__meta-icon"></em>
-              <span class="post__meta-text"
-                >{{ if isset .Site.Params "singledateformat" }}
-                  {{ if .Site.Params.localizedDates }}
-                    {{ time.Format .Site.Params.singleDateFormat .Date }}
-                  {{ else }}
-                    {{ .Date.Format .Site.Params.singleDateFormat }}
-                  {{ end }}
-
-                {{ else }}
-                  {{ if .Site.Params.localizedDates }}
-                    {{ time.Format "Mon, Jan 2, 2006" .Date }}
-                  {{ else }}
-                    {{ .Date.Format "Mon, Jan 2, 2006" }}
-                  {{ end }}
-
-                {{ end }}
-              </span>
-            </li>
-            <li class="post__meta-item">
-              <em class="fas fa-stopwatch post__meta-icon"></em>
-              <span class="post__meta-text">{{ i18n "reading_time" .ReadingTime }}</span>
-            </li>
-          </ul>
+        <div class="note-article__meta">
+          <span>Notes</span>
+          {{ with .Params.tags }}
+            <span>{{ delimit . " / " }}</span>
+          {{ end }}
+          <span>{{ .Date.Format (.Site.Params.singleDateFormat | default "2006-01-02") }}</span>
+          <span>{{ i18n "reading_time" .ReadingTime }}</span>
+        </div>
+        <h1 class="note-article__title">{{ .Title }}</h1>
+        {{ with .Params.summary }}
+          <p class="note-article__summary">{{ . }}</p>
+        {{ end }}
+        {{ with .Params.tags }}
+          <div class="note-article__tags" aria-label="Article tags">
+            {{ range . }}
+              <a class="note-article__tag" href="{{ printf "/tags/%s/" (. | urlize) | relURL }}">{{ . }}</a>
+            {{ end }}
+          </div>
         {{ end }}
 
         {{- partial "expirationnote.html" . -}}
 
-        {{- if (eq .Params.toc true) -}}
-          <div class="inline-toc">
-            {{- partial "toc.html" . -}}
-          </div>
-        {{- end -}}
-
-        {{ .Content }}
+        <div class="post__content note-article__content">
+          {{ .Content }}
+        </div>
 
         {{- if isset .Params "series" -}}
           {{- partial "series.html" . -}}
@@ -72,56 +63,99 @@
         {{- if (eq .Site.Params.mermaid.enable true) -}}
           {{- partial "mermaid.html" . -}}
         {{- end -}}
-      </div>
-      <div class="post__footer">
-        {{ with .Page.Params.Categories }}
-          {{ partial "taxonomy/categories.html" . }}
+      </article>
+    </div>
+  {{ else }}
+    <div class="post-layout {{ if eq .Params.toc true }}post-layout--with-toc{{ end }}">
+      <article
+        class="post {{ with .Site.Params.doNotLoadAnimations }}
+          .
+        {{ else }}
+          animated fadeInDown
+        {{ end }}"
+      >
+        {{ if .Params.thumbnail }}
+          <div class="post__thumbnail-wrapper">
+            <img class="post__thumbnail" src="{{ .Params.thumbnail | relURL }}" alt="Thumbnail image" />
+          </div>
         {{ end }}
+        <div class="post__content">
+          {{ if (eq .Site.Params.disableTitleCapitalization true) }}
+            <h1>{{ .Title }}</h1>
+          {{ else }}
+            <h1>{{ title .Title }}</h1>
+          {{ end }}
+          {{ if or (eq .Type "post") (eq .Type .Site.Params.postSectionName) }}
+            <ul class="post__meta">
+              <li class="post__meta-item">
+                <em class="fas fa-calendar-day post__meta-icon"></em>
+                <span class="post__meta-text"
+                  >{{ if isset .Site.Params "singledateformat" }}
+                    {{ if .Site.Params.localizedDates }}
+                      {{ time.Format .Site.Params.singleDateFormat .Date }}
+                    {{ else }}
+                      {{ .Date.Format .Site.Params.singleDateFormat }}
+                    {{ end }}
 
-        {{ with .Page.Params.Tags }}
-          {{ partial "taxonomy/tags.html" . }}
-        {{ end }}
-      </div>
+                  {{ else }}
+                    {{ if .Site.Params.localizedDates }}
+                      {{ time.Format "Mon, Jan 2, 2006" .Date }}
+                    {{ else }}
+                      {{ .Date.Format "Mon, Jan 2, 2006" }}
+                    {{ end }}
 
-      {{ if and (or (eq .Type "post") (eq .Type .Site.Params.postSectionName)) (ne .Page.Params.disableComments true) }}
-        {{- if .Site.Config.Services.Disqus.Shortname -}}
-          <div id="comment">
-            <h2>{{ i18n "comments" }}</h2>
-            {{ template "_internal/disqus.html" . }}
-          </div>
-        {{- end -}}
-        {{- if .Site.Params.utterances.repo -}}
-          <div id="comment">
-            <h2>{{ i18n "comments" }}</h2>
-            {{ partial "comments/utterances.html" . }}
-          </div>
-        {{- end -}}
-        {{- if .Site.Params.giscus.repo -}}
-          <div id="comment">
-            <h2>{{ i18n "comments" }}</h2>
-            {{ partial "comments/giscus.html" . }}
-          </div>
-        {{- end -}}
-        {{- if .Site.Params.CommentoURL -}}
-          <div id="comment">
-            <h2>{{ i18n "comments" }}</h2>
-            {{ partial "comments/commento.html" . }}
-          </div>
-        {{- end -}}
-        {{- if .Site.Params.gitalk.repo -}}
-          <div id="comment">
-            <h2>{{ i18n "comments" }}</h2>
-            {{ partial "comments/gitalk.html" . }}
-          </div>
-        {{- end -}}
+                  {{ end }}</span
+                >
+              </li>
+              <li class="post__meta-item">
+                <em class="fas fa-stopwatch post__meta-icon"></em>
+                <span class="post__meta-text">{{ i18n "reading_time" .ReadingTime }}</span>
+              </li>
+            </ul>
+          {{ end }}
 
-      {{ end }}
-    </article>
+          {{- partial "expirationnote.html" . -}}
 
-    {{- if (eq .Params.toc true) -}}
-      <aside class="floating-toc animated fadeInDown">
-        {{- partial "toc.html" . | replace `id="TableOfContents"` `class="floating-toc__nav"` | safeHTML -}}
-      </aside>
-    {{- end -}}
-  </div>
+          {{- if (eq .Params.toc true) -}}
+            <div class="inline-toc">
+              {{- partial "toc.html" . -}}
+            </div>
+          {{- end -}}
+
+          {{ .Content }}
+
+          {{- if isset .Params "series" -}}
+            {{- partial "series.html" . -}}
+          {{- end -}}
+
+          {{- if (eq .Site.Params.relatedPosts true) -}}
+            {{- partial "related.html" . -}}
+          {{- end -}}
+
+          {{- if (eq .Params.contact true) -}}
+            {{- partial "contact.html" . -}}
+          {{- end -}}
+
+          {{- if (eq .Site.Params.mermaid.enable true) -}}
+            {{- partial "mermaid.html" . -}}
+          {{- end -}}
+        </div>
+        <div class="post__footer">
+          {{ with .Page.Params.Categories }}
+            {{ partial "taxonomy/categories.html" . }}
+          {{ end }}
+
+          {{ with .Page.Params.Tags }}
+            {{ partial "taxonomy/tags.html" . }}
+          {{ end }}
+        </div>
+      </article>
+
+      {{- if (eq .Params.toc true) -}}
+        <aside class="floating-toc animated fadeInDown">
+          {{- partial "toc.html" . | replace `id="TableOfContents"` `class="floating-toc__nav"` | safeHTML -}}
+        </aside>
+      {{- end -}}
+    </div>
+  {{ end }}
 {{ end }}
