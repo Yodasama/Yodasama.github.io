@@ -27,17 +27,6 @@
         <p>{{ replace .Site.Params.description "\n" "<br />" | safeHTML }}</p>
       </div>
     </div>
-    <form class="sidebar-search" action="{{ "search/" | relURL }}" method="get" role="search">
-      <label class="sidebar-search__label" for="sidebar-search-query">Search</label>
-      <input
-        id="sidebar-search-query"
-        class="sidebar-search__input"
-        type="search"
-        name="q"
-        placeholder="Search posts"
-        autocomplete="off"
-      />
-    </form>
     <ul class="sidebar__list">
       {{ range $item := .Site.Params.socialIcons }}
         <li class="sidebar__list-item">

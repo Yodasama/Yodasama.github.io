@@ -1,13 +1,12 @@
 {{ define "main" }}
   {{ $animationClass := cond .Site.Params.doNotLoadAnimations "" "animated fadeInDown" }}
   {{ $mainSections := .Site.Params.mainSections | default (slice "posts") }}
-  {{ $notes := where .Site.RegularPages "Type" "in" $mainSections }}
+  {{ $notes := sort (where .Site.RegularPages "Type" "in" $mainSections) "Date" "desc" }}
 
   <div class="home-panel {{ $animationClass }}">
     <section class="home-hero" aria-labelledby="home-hero-title">
       <div>
-        <p class="home-hero__eyebrow">Notebook</p>
-        <h1 id="home-hero-title" class="home-hero__title">按主题整理笔记，把项目先留作后续展示。</h1>
+        <h1 id="home-hero-title" class="home-hero__title">Hello,It's My Blog</h1>
         {{ with .Content }}
           <div class="home-hero__description">{{ . }}</div>
         {{ end }}
@@ -27,34 +26,39 @@
 
     <section class="home-notes" id="latest-notes" aria-labelledby="latest-notes-title">
       <div class="home-section-heading">
-        <h2 id="latest-notes-title">Latest Notes</h2>
+        <h2 id="latest-notes-title">Notes</h2>
         <nav class="home-topic-list" aria-label="Note topics">
-          <a class="home-topic home-topic--active" href="#latest-notes">All</a>
-          {{ range $name, $taxonomy := .Site.Taxonomies.tags }}
-            <a class="home-topic" href="{{ printf "/tags/%s/" ($name | urlize) | relURL }}">{{ $name }}</a>
+          {{ range $topic := slice "agent" "security" "面经" "题解" }}
+            <button class="home-topic" type="button" data-topic="{{ $topic | lower }}" aria-pressed="false">{{ $topic }}</button>
           {{ end }}
         </nav>
       </div>
 
-      {{ range $index, $page := first 5 $notes }}
-        <article class="home-note-card {{ if eq $index 0 }}home-note-card--featured{{ end }}">
-          <a class="home-note-card__link" href="{{ .RelPermalink }}" aria-label="{{ .Title }}"></a>
-          <div class="home-note-card__meta">
-            {{ with .Params.tags }}
-              <span>{{ delimit . " · " }}</span>
-            {{ end }}
-            <span>{{ .Date.Format ($.Site.Params.indexDateFormat | default "2006-01-02") }}</span>
-          </div>
-          <h3 class="home-note-card__title">
-            <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-          </h3>
-          {{ with .Params.summary }}
-            <p class="home-note-card__summary">{{ . }}</p>
-          {{ else }}
-            <p class="home-note-card__summary">{{ .Summary | plainify | truncate 110 }}</p>
+      <div class="home-note-grid" data-home-note-grid>
+        {{ range $notes }}
+          {{ $tagList := slice }}
+          {{ range .Params.tags }}
+            {{ $tagList = $tagList | append (. | lower) }}
           {{ end }}
-        </article>
-      {{ end }}
+          <article class="home-note-card" data-note-card data-tags="{{ delimit $tagList " " }}">
+            <a class="home-note-card__link" href="{{ .RelPermalink }}" aria-label="{{ .Title }}"></a>
+            <div class="home-note-card__meta">
+              {{ with .Params.tags }}
+                <span>{{ delimit . " · " }}</span>
+              {{ end }}
+              <span>{{ .Date.Format ($.Site.Params.indexDateFormat | default "2006-01-02") }}</span>
+            </div>
+            <h3 class="home-note-card__title">
+              <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+            </h3>
+            {{ with .Params.summary }}
+              <p class="home-note-card__summary">{{ . }}</p>
+            {{ else }}
+              <p class="home-note-card__summary">{{ .Summary | plainify | truncate 110 }}</p>
+            {{ end }}
+          </article>
+        {{ end }}
+      </div>
     </section>
 
     <section class="home-projects-placeholder" aria-labelledby="home-projects-title">
@@ -67,4 +71,61 @@
       </div>
     </section>
   </div>
+
+  <script>
+    (function () {
+      var maxVisibleCards = 6;
+
+      function setCardVisibility(cards, topic) {
+        var visibleCount = 0;
+
+        cards.forEach(function (card) {
+          var tags = (card.getAttribute("data-tags") || "").toLowerCase().split(/\s+/);
+          var matchesTopic = !topic || tags.indexOf(topic) !== -1;
+          var shouldShow = matchesTopic && visibleCount < maxVisibleCards;
+
+          card.hidden = !shouldShow;
+          if (shouldShow) {
+            visibleCount += 1;
+          }
+        });
+      }
+
+      function setActiveButton(buttons, activeButton) {
+        buttons.forEach(function (button) {
+          var isActive = button === activeButton;
+          button.classList.toggle("home-topic--active", isActive);
+          button.setAttribute("aria-pressed", isActive ? "true" : "false");
+        });
+      }
+
+      function initHomeNotes() {
+        var grid = document.querySelector("[data-home-note-grid]");
+        if (!grid) {
+          return;
+        }
+
+        var cards = Array.prototype.slice.call(grid.querySelectorAll("[data-note-card]"));
+        var buttons = Array.prototype.slice.call(document.querySelectorAll(".home-topic[data-topic]"));
+
+        setCardVisibility(cards, "");
+
+        buttons.forEach(function (button) {
+          button.addEventListener("click", function () {
+            var isActive = button.getAttribute("aria-pressed") === "true";
+            var topic = isActive ? "" : (button.getAttribute("data-topic") || "").toLowerCase();
+
+            setActiveButton(buttons, isActive ? null : button);
+            setCardVisibility(cards, topic);
+          });
+        });
+      }
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initHomeNotes);
+      } else {
+        initHomeNotes();
+      }
+    })();
+  </script>
 {{ end }}

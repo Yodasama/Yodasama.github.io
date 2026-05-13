@@ -450,7 +450,13 @@ html,
 .home-panel {
   box-sizing: border-box;
   color: #20242c;
-  margin: 2.4rem 3rem;
+  display: grid;
+  gap: 0.85rem;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  margin: 1rem 1.6rem;
+  height: calc(100vh - 88px);
+  min-height: 0;
+  overflow: hidden;
 }
 
 .home-hero,
@@ -463,11 +469,11 @@ html,
 }
 
 .home-hero {
-  align-items: flex-end;
-  display: flex;
-  gap: 1.8rem;
-  justify-content: space-between;
-  padding: 2rem;
+  align-items: center;
+  display: grid;
+  gap: clamp(1rem, 3vw, 2.4rem);
+  grid-template-columns: minmax(0, 1fr) clamp(220px, 28%, 300px);
+  padding: 1.35rem 1.5rem;
 }
 
 .home-hero__eyebrow {
@@ -481,7 +487,7 @@ html,
 
 .home-hero__title {
   color: #161a22;
-  font-size: 3.25rem;
+  font-size: 3rem;
   letter-spacing: 0;
   line-height: 1.16;
   margin: 0;
@@ -491,9 +497,9 @@ html,
 
 .home-hero__description {
   color: #4b5563;
-  font-size: 1.45rem;
+  font-size: 1.32rem;
   line-height: 1.65;
-  margin-top: 1rem;
+  margin-top: 0.65rem;
   max-width: 620px;
 }
 
@@ -502,15 +508,17 @@ html,
 }
 
 .home-search {
-  flex: 0 0 230px;
   margin: 0;
+  max-width: 300px;
+  width: 100%;
 }
 
 .home-search__label {
   display: block;
   font-size: 1.1rem;
   font-weight: 750;
-  margin-bottom: 0.45rem;
+  margin-bottom: 0.35rem;
+  opacity: 0.76;
 }
 
 .home-search__input {
@@ -520,8 +528,9 @@ html,
   box-sizing: border-box;
   color: #20242c;
   font-size: 1.35rem;
+  height: 42px;
   line-height: 1.4;
-  padding: 0.72rem 0.85rem;
+  padding: 0 0.9rem;
   width: 100%;
 }
 
@@ -532,8 +541,15 @@ html,
 
 .home-notes,
 .home-projects-placeholder {
-  margin-top: 1.4rem;
-  padding: 1.6rem;
+  margin-top: 0;
+  padding: 1.1rem 1.2rem;
+}
+
+.home-notes {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  min-height: 0;
+  overflow: hidden;
 }
 
 .home-section-heading {
@@ -541,7 +557,7 @@ html,
   display: flex;
   gap: 1rem;
   justify-content: space-between;
-  margin-bottom: 1.2rem;
+  margin-bottom: 0.8rem;
 }
 
 .home-section-heading h2 {
@@ -556,7 +572,7 @@ html,
 .home-topic-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.55rem;
+  gap: 0.4rem;
   justify-content: flex-end;
 }
 
@@ -567,15 +583,20 @@ html,
   border-radius: 999px;
   color: #374151 !important;
   display: inline-flex;
-  font-size: 1.18rem;
+  font-size: 1.1rem;
   font-weight: 700;
   line-height: 1;
-  padding: 0.65rem 0.8rem;
+  padding: 0.52rem 0.68rem;
   text-decoration: none;
   transition:
     background-color 180ms ease,
     border-color 180ms ease,
     color 180ms ease;
+}
+
+.home-topic {
+  cursor: pointer;
+  font-family: inherit;
 }
 
 .home-topic:hover,
@@ -591,14 +612,27 @@ html,
   color: #ffffff !important;
 }
 
+.home-note-grid {
+  display: grid;
+  gap: 0.72rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  min-height: 0;
+}
+
 .home-note-card {
   background: rgba(255, 255, 255, 0.78);
   border: 1px solid rgba(255, 255, 255, 0.36);
   border-radius: 8px;
   box-sizing: border-box;
   color: #20242c;
-  margin-top: 0.9rem;
-  padding: 1.25rem 1.35rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-top: 0;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0.9rem 1rem;
   position: relative;
   transition:
     background-color 180ms ease,
@@ -608,6 +642,10 @@ html,
 
 .home-note-card:first-of-type {
   margin-top: 0;
+}
+
+.home-note-card[hidden] {
+  display: none !important;
 }
 
 .home-note-card:hover {
@@ -626,21 +664,23 @@ html,
   color: #5d6470;
   display: flex;
   flex-wrap: wrap;
-  font-size: 1.18rem;
+  font-size: 1.08rem;
   gap: 0.6rem;
   line-height: 1.35;
 }
 
 .home-note-card__title {
-  font-size: 2rem;
+  font-size: 1.5rem;
   letter-spacing: 0;
-  line-height: 1.25;
-  margin: 0.55rem 0 0;
+  line-height: 1.28;
+  margin: 0.38rem 0 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
   text-transform: none;
 }
 
 .home-note-card--featured .home-note-card__title {
-  font-size: 2.25rem;
+  font-size: 1.5rem;
 }
 
 .home-note-card__title a {
@@ -651,10 +691,14 @@ html,
 }
 
 .home-note-card__summary {
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
   color: #4b5563;
-  font-size: 1.38rem;
-  line-height: 1.65;
-  margin: 0.65rem 0 0;
+  display: -webkit-box;
+  font-size: 1.22rem;
+  line-height: 1.5;
+  margin: 0.42rem 0 0;
+  overflow: hidden;
 }
 
 .home-projects-placeholder {
@@ -672,20 +716,59 @@ html,
   border: 1px dashed rgba(32, 36, 44, 0.18);
   border-radius: 8px;
   color: #4b5563;
-  font-size: 1.38rem;
-  line-height: 1.65;
-  padding: 1rem 1.1rem;
+  font-size: 1.2rem;
+  line-height: 1.45;
+  padding: 0.72rem 0.85rem;
+}
+
+.wrapper:has(.home-panel) + .footer__base {
+  display: none;
+}
+
+@media screen and (min-width: 961px) {
+  .wrapper__sidebar:not(.wrapper__sidebar--hidden) {
+    width: 30%;
+  }
+
+  .wrapper__main:not(.wrapper__main--fullscreen) {
+    width: 70%;
+  }
+
+  .body:has(.home-panel) {
+    overflow: hidden;
+  }
+
+  .wrapper:has(.home-panel) {
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .wrapper:has(.home-panel) .wrapper__main {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .wrapper:has(.home-panel) .header {
+    flex: 0 0 auto;
+  }
+
+  .home-projects-placeholder .home-section-heading {
+    margin-bottom: 0.45rem;
+  }
 }
 
 .note-detail-layout {
+  align-items: start;
   box-sizing: border-box;
   color: #20242c;
   display: grid;
   gap: 0;
-  grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
+  grid-template-columns: clamp(210px, 22vw, 320px) minmax(0, 1fr);
   margin: 2rem auto;
   max-width: 1180px;
-  overflow: hidden;
+  overflow: visible;
   padding: 0 1.2rem;
 }
 
@@ -694,13 +777,16 @@ html,
   border: 1px solid rgba(255, 255, 255, 0.34);
   border-radius: 8px 0 0 8px;
   box-shadow: 0 18px 50px rgba(0, 0, 0, 0.18);
+  max-height: calc(100vh - 2.4rem);
   min-width: 0;
+  overflow: auto;
   padding: 1.45rem 1.2rem;
+  position: sticky;
+  top: 1.2rem;
 }
 
 .article-toc-panel__inner {
-  position: sticky;
-  top: 1.4rem;
+  min-width: 0;
 }
 
 .article-return-link {
@@ -884,6 +970,8 @@ html,
 @media screen and (max-width: 960px) {
   .home-panel {
     margin: 1.2rem;
+    max-height: none;
+    overflow: visible;
   }
 
   .home-hero {
@@ -915,6 +1003,11 @@ html,
     padding: 1.2rem;
   }
 
+  .home-note-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+  }
+
   .home-note-card--featured .home-note-card__title,
   .home-note-card__title {
     font-size: 1.82rem;
@@ -928,7 +1021,10 @@ html,
 
   .article-toc-panel {
     border-radius: 8px 8px 0 0;
+    max-height: none;
+    overflow: visible;
     padding: 1.15rem;
+    position: static;
   }
 
   .article-toc-panel__inner {
