@@ -80,9 +80,82 @@
 
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initHomeDashboard);
-  } else {
+  function initArticleToc() {
+    var panels = Array.prototype.slice.call(document.querySelectorAll("[data-article-toc-panel]"));
+
+    panels.forEach(function (panel) {
+      var content = panel.querySelector("[data-article-toc-content]");
+      if (!content) {
+        return;
+      }
+
+      var expandableItems = Array.prototype.slice.call(content.querySelectorAll("li")).filter(function (item) {
+        var children = Array.prototype.slice.call(item.children);
+        var directLink = children.find(function (child) {
+          return child.tagName && child.tagName.toLowerCase() === "a";
+        });
+        var directSubmenu = children.find(function (child) {
+          return child.tagName && child.tagName.toLowerCase() === "ul";
+        });
+
+        if (!directLink || !directSubmenu) {
+          return false;
+        }
+
+        item.classList.add("article-toc-panel__item--has-children");
+        directLink.setAttribute("aria-expanded", "false");
+        directSubmenu.hidden = true;
+        return true;
+      });
+
+      function setOpen(targetItem, open) {
+        var children = Array.prototype.slice.call(targetItem.children);
+        var link = children.find(function (child) {
+          return child.tagName && child.tagName.toLowerCase() === "a";
+        });
+        var submenu = children.find(function (child) {
+          return child.tagName && child.tagName.toLowerCase() === "ul";
+        });
+
+        if (!link || !submenu) {
+          return;
+        }
+
+        targetItem.classList.toggle("article-toc-panel__item--open", open);
+        link.setAttribute("aria-expanded", open ? "true" : "false");
+        submenu.hidden = !open;
+      }
+
+      expandableItems.forEach(function (item, index) {
+        var link = Array.prototype.slice.call(item.children).find(function (child) {
+          return child.tagName && child.tagName.toLowerCase() === "a";
+        });
+
+        if (index === 0) {
+          setOpen(item, true);
+        }
+
+        link.addEventListener("click", function (event) {
+          event.preventDefault();
+
+          var willOpen = !item.classList.contains("article-toc-panel__item--open");
+          expandableItems.forEach(function (candidate) {
+            setOpen(candidate, false);
+          });
+          setOpen(item, willOpen);
+        });
+      });
+    });
+  }
+
+  function initPageInteractions() {
     initHomeDashboard();
+    initArticleToc();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initPageInteractions);
+  } else {
+    initPageInteractions();
   }
 })();

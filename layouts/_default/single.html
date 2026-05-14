@@ -71,17 +71,21 @@
         </article>
       </main>
 
-      <aside class="content-aside article-toc-panel">
+      <aside class="content-aside article-toc-panel" data-article-toc-panel>
         <div class="article-toc-panel__inner">
-          <div class="article-toc-panel__label">目录</div>
-          <div class="article-toc-panel__title">{{ .Title }}</div>
-          {{ if eq .Params.toc true }}
-            <nav class="article-toc-panel__nav" aria-label="Current article table of contents">
-              {{ .TableOfContents }}
-            </nav>
-          {{ else }}
-            <p class="article-toc-panel__empty">这篇文章没有开启目录。</p>
-          {{ end }}
+          <div class="article-toc-panel__head">
+            <div class="article-toc-panel__label">目录</div>
+            <div class="article-toc-panel__title">{{ .Title }}</div>
+          </div>
+          <div id="article-toc-content" class="article-toc-panel__content" data-article-toc-content>
+            {{ if eq .Params.toc true }}
+              <nav class="article-toc-panel__nav" aria-label="Current article table of contents">
+                {{ .TableOfContents }}
+              </nav>
+            {{ else }}
+              <p class="article-toc-panel__empty">这篇文章没有开启目录。</p>
+            {{ end }}
+          </div>
         </div>
       </aside>
     </div>

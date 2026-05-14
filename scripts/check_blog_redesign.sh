@@ -80,6 +80,8 @@ grep -q 'class="home-shell content-shell' "$POST_HTML"
 grep -q 'class="home-sidebar' "$POST_HTML"
 grep -q 'class="content-main"' "$POST_HTML"
 grep -q 'article-toc-panel' "$POST_HTML"
+grep -q 'data-article-toc-panel' "$POST_HTML"
+grep -q 'data-article-toc-content' "$POST_HTML"
 grep -q 'class="article-inline-return"' "$POST_HTML"
 grep -q 'href="/#latest-notes"' "$POST_HTML"
 if grep -q 'data-home-menu="projects"' "$POST_HTML"; then
@@ -105,6 +107,13 @@ grep -q '.content-shell' "$ROOT_DIR/assets/css/custom.css"
 grep -q '.content-main' "$ROOT_DIR/assets/css/custom.css"
 grep -q '.content-aside' "$ROOT_DIR/assets/css/custom.css"
 grep -q '.project-card-grid' "$ROOT_DIR/assets/css/custom.css"
+grep -q 'function initArticleToc' "$ROOT_DIR/assets/js/home-notes.js"
+grep -q 'article-toc-panel__item--has-children' "$ROOT_DIR/assets/js/home-notes.js"
+grep -q 'article-toc-panel__item--open' "$ROOT_DIR/assets/css/custom.css"
+if grep -q 'data-article-toc-toggle' "$POST_HTML"; then
+  echo "article TOC should expand by heading items, not a separate collapse button" >&2
+  exit 1
+fi
 grep -q 'class="home-shell content-shell search-shell' "$SEARCH_HTML"
 grep -q 'class="home-sidebar' "$SEARCH_HTML"
 grep -q 'class="content-main"' "$SEARCH_HTML"
