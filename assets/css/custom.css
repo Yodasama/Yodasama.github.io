@@ -1474,30 +1474,51 @@ html,
   color: #374151;
 }
 
+.note-article__content :not(pre) > code {
+  background: hsl(0, 100%, 95%);
+  border-radius: 5px;
+  color: #333333;
+  font-family: "Cascadia Code", "Sarasa Term SC", Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 0.92em;
+  padding: 1px 4px;
+}
+
 .note-article__content pre {
-  background: #151a21 !important;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 8px;
-  color: #edf0f4 !important;
-  line-height: 1.6;
+  background: hsl(0, 0%, 95%) !important;
+  border: 0;
+  border-radius: 5px;
+  box-shadow: 0 8px 16px 1px rgba(0, 0, 0, 0.1);
+  color: #333333 !important;
+  line-height: 1.5;
   overflow-x: auto;
-  padding: 1.15rem 1.2rem;
+  padding: 2.85rem 1.2rem 1.1rem;
   position: relative;
+}
+
+.note-article__content pre::before {
+  background: hsl(2, 96%, 68%);
+  border-radius: 50%;
+  box-shadow:
+    23px 0 #fdbc40,
+    45px 0 #35cd4b;
+  content: "";
+  height: 12px;
+  left: 15px;
+  position: absolute;
+  top: 0.92rem;
+  width: 12px;
 }
 
 .note-article__content pre code {
   background: transparent !important;
-  color: #edf0f4 !important;
-  font-family: Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-  font-size: 1.35rem;
+  color: #333333 !important;
+  font-family: "Cascadia Code", "Sarasa Term SC", Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 1.28rem;
+  line-height: 1.5;
 }
 
 .note-article__content .highlight {
   margin: 1.5rem 0;
-}
-
-.note-article__content .highlight pre {
-  padding-top: 2.85rem;
 }
 
 .note-article__content pre code span {
@@ -1505,10 +1526,10 @@ html,
 }
 
 .note-article__content pre code[data-lang]::before {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: hsl(0, 100%, 95%);
+  border: 1px solid hsl(0, 100%, 86%);
   border-radius: 999px;
-  color: #c8ccd4;
+  color: #595959;
   content: attr(data-lang);
   font-family:
     -apple-system,
@@ -1524,7 +1545,36 @@ html,
   position: absolute;
   right: 0.85rem;
   text-transform: lowercase;
-  top: 0.75rem;
+  top: 0.78rem;
+}
+
+.note-article__content .chroma {
+  --chr-def-color: #333333;
+  --chr-def-bg-color: hsl(0, 0%, 95%);
+  --chr-k-color: hsl(215, 100%, 42%);
+  --chr-kc-color: hsl(215, 100%, 42%);
+  --chr-kd-color: hsl(215, 100%, 42%);
+  --chr-kn-color: hsl(2, 82%, 52%);
+  --chr-kp-color: hsl(215, 100%, 42%);
+  --chr-kr-color: hsl(215, 100%, 42%);
+  --chr-kt-color: hsl(215, 100%, 42%);
+  --chr-na-color: hsl(120, 58%, 32%);
+  --chr-nc-color: hsl(120, 58%, 32%);
+  --chr-nd-color: hsl(120, 58%, 32%);
+  --chr-ne-color: hsl(120, 58%, 32%);
+  --chr-nf-color: hsl(120, 58%, 32%);
+  --chr-nx-color: hsl(120, 58%, 32%);
+  --chr-nt-color: hsl(2, 82%, 52%);
+  --chr-s-color: hsl(28, 92%, 38%);
+  --chr-s1-color: hsl(28, 92%, 38%);
+  --chr-s2-color: hsl(28, 92%, 38%);
+  --chr-sh-color: hsl(28, 92%, 38%);
+  --chr-m-color: hsl(268, 72%, 55%);
+  --chr-mi-color: hsl(268, 72%, 55%);
+  --chr-c-color: #808080;
+  --chr-c1-color: #808080;
+  --chr-cm-color: #808080;
+  --chr-p-color: #333333;
 }
 
 @media screen and (max-width: 760px) {
