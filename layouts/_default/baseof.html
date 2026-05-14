@@ -12,7 +12,8 @@
   {{- partial "head.html" . -}}
   <body class="body">
     {{- $isProjectPage := and .IsPage .File (eq .File.BaseFileName "projects") -}}
-    {{- $hideStandardFrame := or .IsHome (and .IsPage (eq .Section "posts")) $isProjectPage -}}
+    {{- $isSearchPage := and .IsPage .File (eq .File.BaseFileName "search") -}}
+    {{- $hideStandardFrame := or .IsHome (and .IsPage (eq .Section "posts")) $isProjectPage $isSearchPage -}}
     {{- $hideHeader := or $hideStandardFrame .IsHome -}}
     {{- $hideSidebar := and (or (eq .Site.Params.hidesidebar true) (eq .Params.hidesidebar true)) (not .IsHome) -}}
     <div class="wrapper">

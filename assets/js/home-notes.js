@@ -78,15 +78,6 @@
       });
     });
 
-    var projectPreviewControls = Array.prototype.slice.call(shell.querySelectorAll("[data-project-preview]"));
-    projectPreviewControls.forEach(function (control) {
-      control.addEventListener("click", function () {
-        var siblingControls = Array.prototype.slice.call(control.parentElement.querySelectorAll("[data-project-preview]"));
-        siblingControls.forEach(function (item) {
-          item.classList.toggle("home-submenu__item--active-soft", item === control);
-        });
-      });
-    });
   }
 
   if (document.readyState === "loading") {

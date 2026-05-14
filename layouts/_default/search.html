@@ -1,20 +1,47 @@
 {{ define "main" }}
-  <div class="post animated fadeInDown">
-    <div class="post__content">
-      <h1>{{ .Title }}</h1>
-      <div class="site-search" data-index-url="{{ "index.json" | relURL }}">
-        <label class="site-search__label" for="search-query">Search posts</label>
-        <input
-          id="search-query"
-          class="site-search__input"
-          type="search"
-          name="q"
-          placeholder="Search by title, content, or tag"
-          autocomplete="off"
-        />
-        <p class="site-search__status" aria-live="polite"></p>
-        <div class="site-search__results"></div>
-      </div>
-    </div>
+  {{ $animationClass := cond .Site.Params.doNotLoadAnimations "" "animated fadeInDown" }}
+
+  <div class="home-shell content-shell search-shell {{ $animationClass }}" data-home-shell>
+    {{ partial "home-nav.html" (dict "context" . "active" "search") }}
+
+    <main class="content-main">
+      <article class="note-article search-article">
+        <div class="note-article__meta">
+          <span>Search</span>
+        </div>
+        <h1 class="note-article__title">{{ .Title }}</h1>
+        <p class="note-article__summary">在这里搜索文章标题、摘要、正文和标签。结果会直接在当前中间区域刷新。</p>
+
+        <div class="site-search" data-index-url="{{ "index.json" | relURL }}">
+          <label class="site-search__label" for="search-query">Search notes</label>
+          <input
+            id="search-query"
+            class="site-search__input"
+            type="search"
+            name="q"
+            placeholder="输入关键词"
+            autocomplete="off"
+          />
+          <p class="site-search__status" aria-live="polite"></p>
+          <div class="site-search__results"></div>
+        </div>
+      </article>
+    </main>
+
+    <aside class="content-aside search-aside">
+      <section class="home-about__section">
+        <h2>Search</h2>
+        <p class="project-aside__copy">搜索页保持和首页一致的左右栏布局，只有中间结果区域随关键词更新。</p>
+      </section>
+      <section class="home-about__section home-about__section--focus">
+        <h2>可搜索内容</h2>
+        <ul class="home-focus-list">
+          <li>文章标题</li>
+          <li>文章摘要</li>
+          <li>正文内容</li>
+          <li>标签信息</li>
+        </ul>
+      </section>
+    </aside>
   </div>
 {{ end }}

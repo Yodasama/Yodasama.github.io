@@ -2,16 +2,10 @@
 {{- $active := .active | default "home" -}}
 {{- $activeTopic := .activeTopic | default "" -}}
 {{- $notesExpanded := or (eq $active "notes") (ne $activeTopic "") -}}
-{{- $projectsExpanded := and (eq $active "projects") (not (eq $active "projects-page")) -}}
 {{- $topics := slice
   (dict "key" "security" "label" "Security")
   (dict "key" "agent" "label" "Agent")
   (dict "key" "algorithm" "label" "题解")
--}}
-{{- $projectLinks := slice
-  (dict "label" "HackAgent" "url" ("projects/" | relURL))
-  (dict "label" "OnCallAgent" "url" ("projects/" | relURL))
-  (dict "label" "安全面经" "url" ("projects/" | relURL))
 -}}
 
 <aside class="home-sidebar" aria-label="Homepage navigation">
@@ -76,31 +70,14 @@
       </div>
     </div>
 
-    <div class="home-nav__group">
-      {{ if eq $active "projects-page" }}
-        <a class="home-nav__item home-nav__item--active" href="{{ "projects/" | relURL }}" aria-current="page">
-          <span class="home-nav__icon" aria-hidden="true"></span>
-          <span>Projects</span>
-        </a>
-      {{ else }}
-        <button
-          class="home-nav__item home-nav__toggle {{ if $projectsExpanded }}home-nav__item--open{{ end }}"
-          type="button"
-          data-home-accordion="projects"
-          aria-expanded="{{ if $projectsExpanded }}true{{ else }}false{{ end }}"
-          aria-controls="home-projects-menu"
-        >
-          <span class="home-nav__icon" aria-hidden="true"></span>
-          <span>Projects</span>
-          <span class="home-nav__chevron" aria-hidden="true">{{ if $projectsExpanded }}⌄{{ else }}›{{ end }}</span>
-        </button>
-        <div class="home-submenu" id="home-projects-menu" data-home-menu="projects" {{ if not $projectsExpanded }}hidden{{ end }}>
-          {{ range $projectLinks }}
-            <button class="home-submenu__item" type="button" data-project-preview="{{ .label }}">{{ .label }}</button>
-          {{ end }}
-        </div>
-      {{ end }}
-    </div>
+    <a
+      class="home-nav__item {{ if eq $active "projects-page" }}home-nav__item--active{{ end }}"
+      href="{{ "projects/" | relURL }}"
+      {{ if eq $active "projects-page" }}aria-current="page"{{ end }}
+    >
+      <span class="home-nav__icon" aria-hidden="true"></span>
+      <span>Projects</span>
+    </a>
   </nav>
 
   {{ with $context.Site.Params.socialIcons }}
