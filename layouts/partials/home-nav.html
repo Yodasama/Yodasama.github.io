@@ -1,0 +1,116 @@
+{{- $context := .context -}}
+{{- $active := .active | default "home" -}}
+{{- $activeTopic := .activeTopic | default "" -}}
+{{- $notesExpanded := or (eq $active "notes") (ne $activeTopic "") -}}
+{{- $projectsExpanded := and (eq $active "projects") (not (eq $active "projects-page")) -}}
+{{- $topics := slice
+  (dict "key" "security" "label" "Security")
+  (dict "key" "agent" "label" "Agent")
+  (dict "key" "algorithm" "label" "题解")
+-}}
+{{- $projectLinks := slice
+  (dict "label" "HackAgent" "url" ("projects/" | relURL))
+  (dict "label" "OnCallAgent" "url" ("projects/" | relURL))
+  (dict "label" "安全面经" "url" ("projects/" | relURL))
+-}}
+
+<aside class="home-sidebar" aria-label="Homepage navigation">
+  <div class="home-profile">
+    {{ with $context.Site.Params.profilePicture }}
+      <img class="home-profile__avatar" src="{{ . | relURL }}" alt="{{ $context.Site.Params.author | default $context.Site.Title }}" />
+    {{ end }}
+    <div class="home-profile__text">
+      <div class="home-profile__name">{{ $context.Site.Params.title | default $context.Site.Title }}</div>
+    </div>
+  </div>
+
+  <nav class="home-nav" aria-label="Primary">
+    <a
+      class="home-nav__item {{ if eq $active "home" }}home-nav__item--active{{ end }}"
+      href="{{ "/" | relURL }}#latest-notes"
+      {{ if eq $active "home" }}aria-current="page"{{ end }}
+      data-home-filter="all"
+      data-home-filter-label="All Notes"
+    >
+      <span class="home-nav__icon" aria-hidden="true"></span>
+      <span>Home</span>
+    </a>
+
+    <div class="home-nav__group">
+      <button
+        class="home-nav__item home-nav__toggle {{ if $notesExpanded }}home-nav__item--open{{ end }}"
+        type="button"
+        data-home-accordion="notes"
+        aria-expanded="{{ if $notesExpanded }}true{{ else }}false{{ end }}"
+        aria-controls="home-notes-menu"
+      >
+        <span class="home-nav__icon" aria-hidden="true"></span>
+        <span>Notes</span>
+        <span class="home-nav__chevron" aria-hidden="true">{{ if $notesExpanded }}⌄{{ else }}›{{ end }}</span>
+      </button>
+      <div class="home-submenu" id="home-notes-menu" data-home-menu="notes" {{ if not $notesExpanded }}hidden{{ end }}>
+        {{ range $topics }}
+          {{- $isActiveTopic := eq $activeTopic .key -}}
+          {{ if eq $active "home" }}
+            <button
+              class="home-submenu__item {{ if $isActiveTopic }}home-submenu__item--active{{ end }}"
+              type="button"
+              data-home-filter="{{ .key }}"
+              data-home-filter-label="{{ .label }}"
+              {{ if $isActiveTopic }}aria-current="page"{{ end }}
+            >
+              {{ .label }}
+            </button>
+          {{ else }}
+            <a
+              class="home-submenu__item {{ if $isActiveTopic }}home-submenu__item--active{{ end }}"
+              href="{{ "/" | relURL }}#latest-notes"
+              data-home-filter="{{ .key }}"
+              data-home-filter-label="{{ .label }}"
+              {{ if $isActiveTopic }}aria-current="page"{{ end }}
+            >
+              {{ .label }}
+            </a>
+          {{ end }}
+        {{ end }}
+      </div>
+    </div>
+
+    <div class="home-nav__group">
+      {{ if eq $active "projects-page" }}
+        <a class="home-nav__item home-nav__item--active" href="{{ "projects/" | relURL }}" aria-current="page">
+          <span class="home-nav__icon" aria-hidden="true"></span>
+          <span>Projects</span>
+        </a>
+      {{ else }}
+        <button
+          class="home-nav__item home-nav__toggle {{ if $projectsExpanded }}home-nav__item--open{{ end }}"
+          type="button"
+          data-home-accordion="projects"
+          aria-expanded="{{ if $projectsExpanded }}true{{ else }}false{{ end }}"
+          aria-controls="home-projects-menu"
+        >
+          <span class="home-nav__icon" aria-hidden="true"></span>
+          <span>Projects</span>
+          <span class="home-nav__chevron" aria-hidden="true">{{ if $projectsExpanded }}⌄{{ else }}›{{ end }}</span>
+        </button>
+        <div class="home-submenu" id="home-projects-menu" data-home-menu="projects" {{ if not $projectsExpanded }}hidden{{ end }}>
+          {{ range $projectLinks }}
+            <button class="home-submenu__item" type="button" data-project-preview="{{ .label }}">{{ .label }}</button>
+          {{ end }}
+        </div>
+      {{ end }}
+    </div>
+  </nav>
+
+  {{ with $context.Site.Params.socialIcons }}
+    <div class="home-social" aria-label="Social links">
+      {{ range . }}
+        <a class="home-social__link" href="{{ .url }}" title="{{ .title }}">
+          <i class="{{ .icon }}" aria-hidden="true"></i>
+          <span>{{ .title }}</span>
+        </a>
+      {{ end }}
+    </div>
+  {{ end }}
+</aside>

@@ -11,7 +11,9 @@
 >
   {{- partial "head.html" . -}}
   <body class="body">
-    {{- $hideStandardFrame := and .IsPage (eq .Section "posts") -}}
+    {{- $isProjectPage := and .IsPage .File (eq .File.BaseFileName "projects") -}}
+    {{- $hideStandardFrame := or .IsHome (and .IsPage (eq .Section "posts")) $isProjectPage -}}
+    {{- $hideHeader := or $hideStandardFrame .IsHome -}}
     {{- $hideSidebar := and (or (eq .Site.Params.hidesidebar true) (eq .Params.hidesidebar true)) (not .IsHome) -}}
     <div class="wrapper">
       <aside
@@ -32,7 +34,7 @@
           class="wrapper__main"
         {{ end }}
       >
-        {{- if not $hideStandardFrame -}}
+        {{- if not $hideHeader -}}
           <header class="header">{{ partial "navbar.html" . }}</header>
         {{- end -}}
         {{- block "main" . }}{{- end }}

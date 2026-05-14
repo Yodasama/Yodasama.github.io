@@ -1,10 +1,79 @@
 {{ define "main" }}
+  {{ $animationClass := cond .Site.Params.doNotLoadAnimations "" "animated fadeInDown" }}
+  {{ $isProjectPage := and .File (eq .File.BaseFileName "projects") }}
+
   {{ if eq .Section "posts" }}
-    <div class="note-detail-layout {{ with .Site.Params.doNotLoadAnimations }}{{ else }}animated fadeInDown{{ end }}">
-      <aside class="article-toc-panel">
+    {{ $tagList := slice }}
+    {{ range .Params.tags }}
+      {{ $tagList = $tagList | append (. | lower) }}
+    {{ end }}
+    {{ $activeTopic := "" }}
+    {{ if in $tagList "security" }}
+      {{ $activeTopic = "security" }}
+    {{ else if in $tagList "agent" }}
+      {{ $activeTopic = "agent" }}
+    {{ else if or (in $tagList "题解") (in $tagList "code") }}
+      {{ $activeTopic = "algorithm" }}
+    {{ end }}
+
+    <div class="home-shell content-shell {{ $animationClass }}" data-home-shell>
+      {{ partial "home-nav.html" (dict "context" . "active" "notes" "activeTopic" $activeTopic) }}
+
+      <main class="content-main">
+        <article class="note-article">
+          <a class="article-inline-return" href="{{ "/" | relURL }}#latest-notes">返回首页</a>
+          {{ if .Params.thumbnail }}
+            <div class="post__thumbnail-wrapper">
+              <img class="post__thumbnail" src="{{ .Params.thumbnail | relURL }}" alt="Thumbnail image" />
+            </div>
+          {{ end }}
+          <div class="note-article__meta">
+            <span>Notes</span>
+            {{ with .Params.tags }}
+              <span>{{ delimit . " / " }}</span>
+            {{ end }}
+            <span>{{ .Date.Format (.Site.Params.singleDateFormat | default "2006-01-02") }}</span>
+            <span>{{ i18n "reading_time" .ReadingTime }}</span>
+          </div>
+          <h1 class="note-article__title">{{ .Title }}</h1>
+          {{ with .Params.summary }}
+            <p class="note-article__summary">{{ . }}</p>
+          {{ end }}
+          {{ with .Params.tags }}
+            <div class="note-article__tags" aria-label="Article tags">
+              {{ range . }}
+                <a class="note-article__tag" href="{{ printf "/tags/%s/" (. | urlize) | relURL }}">{{ . }}</a>
+              {{ end }}
+            </div>
+          {{ end }}
+
+          {{- partial "expirationnote.html" . -}}
+
+          <div class="post__content note-article__content">
+            {{ .Content }}
+          </div>
+
+          {{- if isset .Params "series" -}}
+            {{- partial "series.html" . -}}
+          {{- end -}}
+
+          {{- if (eq .Site.Params.relatedPosts true) -}}
+            {{- partial "related.html" . -}}
+          {{- end -}}
+
+          {{- if (eq .Params.contact true) -}}
+            {{- partial "contact.html" . -}}
+          {{- end -}}
+
+          {{- if (eq .Site.Params.mermaid.enable true) -}}
+            {{- partial "mermaid.html" . -}}
+          {{- end -}}
+        </article>
+      </main>
+
+      <aside class="content-aside article-toc-panel">
         <div class="article-toc-panel__inner">
-          <a class="article-return-link" href="{{ "/" | relURL }}#latest-notes">返回首页</a>
-          <div class="article-toc-panel__label">On this page</div>
+          <div class="article-toc-panel__label">目录</div>
           <div class="article-toc-panel__title">{{ .Title }}</div>
           {{ if eq .Params.toc true }}
             <nav class="article-toc-panel__nav" aria-label="Current article table of contents">
@@ -15,55 +84,52 @@
           {{ end }}
         </div>
       </aside>
+    </div>
+  {{ else if $isProjectPage }}
+    {{ $projectCards := slice
+      (dict "name" "HackAgent" "direction" "Agent Security" "summary" "自动化渗透与安全分析方向的 Agent 项目记录。" "status" "占位")
+      (dict "name" "OnCallAgent" "direction" "Agent Ops" "summary" "面向 on-call 场景的 Agent 学习与项目整理。" "status" "占位")
+      (dict "name" "安全面经" "direction" "Security Interview" "summary" "网络安全面试题、知识点和复盘材料的项目化整理。" "status" "占位")
+    }}
+    <div class="home-shell content-shell {{ $animationClass }}" data-home-shell>
+      {{ partial "home-nav.html" (dict "context" . "active" "projects-page") }}
 
-      <article class="note-article">
-        {{ if .Params.thumbnail }}
-          <div class="post__thumbnail-wrapper">
-            <img class="post__thumbnail" src="{{ .Params.thumbnail | relURL }}" alt="Thumbnail image" />
+      <main class="content-main">
+        <article class="note-article project-article">
+          <div class="note-article__meta">
+            <span>Projects</span>
           </div>
-        {{ end }}
-        <div class="note-article__meta">
-          <span>Notes</span>
-          {{ with .Params.tags }}
-            <span>{{ delimit . " / " }}</span>
-          {{ end }}
-          <span>{{ .Date.Format (.Site.Params.singleDateFormat | default "2006-01-02") }}</span>
-          <span>{{ i18n "reading_time" .ReadingTime }}</span>
-        </div>
-        <h1 class="note-article__title">{{ .Title }}</h1>
-        {{ with .Params.summary }}
-          <p class="note-article__summary">{{ . }}</p>
-        {{ end }}
-        {{ with .Params.tags }}
-          <div class="note-article__tags" aria-label="Article tags">
-            {{ range . }}
-              <a class="note-article__tag" href="{{ printf "/tags/%s/" (. | urlize) | relURL }}">{{ . }}</a>
+          <h1 class="note-article__title">{{ .Title }}</h1>
+          <p class="note-article__summary">这里先放项目占位。后面等复盘、架构图、截图或演示材料更完整，再迁移成完整的项目详情页。</p>
+          <div class="project-card-grid">
+            {{ range $projectCards }}
+              <article class="project-card">
+                <div class="project-card__topline">
+                  <span>{{ .direction }}</span>
+                  <span>{{ .status }}</span>
+                </div>
+                <h2>{{ .name }}</h2>
+                <p>{{ .summary }}</p>
+              </article>
             {{ end }}
           </div>
-        {{ end }}
+        </article>
+      </main>
 
-        {{- partial "expirationnote.html" . -}}
-
-        <div class="post__content note-article__content">
-          {{ .Content }}
-        </div>
-
-        {{- if isset .Params "series" -}}
-          {{- partial "series.html" . -}}
-        {{- end -}}
-
-        {{- if (eq .Site.Params.relatedPosts true) -}}
-          {{- partial "related.html" . -}}
-        {{- end -}}
-
-        {{- if (eq .Params.contact true) -}}
-          {{- partial "contact.html" . -}}
-        {{- end -}}
-
-        {{- if (eq .Site.Params.mermaid.enable true) -}}
-          {{- partial "mermaid.html" . -}}
-        {{- end -}}
-      </article>
+      <aside class="content-aside project-aside">
+        <section class="home-about__section">
+          <h2>Projects</h2>
+          <p class="project-aside__copy">项目区先保持轻量，用来承接 Agent、安全面经和后续实践复盘。</p>
+        </section>
+        <section class="home-about__section home-about__section--focus">
+          <h2>目前已做</h2>
+          <ul class="home-focus-list">
+            {{ range $projectCards }}
+              <li>{{ .name }}</li>
+            {{ end }}
+          </ul>
+        </section>
+      </aside>
     </div>
   {{ else }}
     <div class="post-layout {{ if eq .Params.toc true }}post-layout--with-toc{{ end }}">

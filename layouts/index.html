@@ -2,130 +2,124 @@
   {{ $animationClass := cond .Site.Params.doNotLoadAnimations "" "animated fadeInDown" }}
   {{ $mainSections := .Site.Params.mainSections | default (slice "posts") }}
   {{ $notes := sort (where .Site.RegularPages "Type" "in" $mainSections) "Date" "desc" }}
+  {{ $about := .Site.GetPage "about" }}
+  {{ $dateFormat := .Site.Params.indexDateFormat | default "2006-01-02" }}
+  {{ $topics := slice
+    (dict "key" "security" "label" "Security" "tags" (slice "security"))
+    (dict "key" "agent" "label" "Agent" "tags" (slice "agent"))
+    (dict "key" "algorithm" "label" "题解" "tags" (slice "题解" "code"))
+  }}
 
-  <div class="home-panel {{ $animationClass }}">
-    <section class="home-hero" aria-labelledby="home-hero-title">
-      <div>
-        <h1 id="home-hero-title" class="home-hero__title">Hello,It's My Blog</h1>
+  <div class="home-shell {{ $animationClass }}" data-home-shell>
+    {{ partial "home-nav.html" (dict "context" . "active" "home") }}
+
+    <main class="home-main" id="latest-notes">
+      <header class="home-intro">
+        <h1 class="home-intro__title">{{ .Site.Params.description | default .Site.Title }}</h1>
         {{ with .Content }}
-          <div class="home-hero__description">{{ . }}</div>
+          <div class="home-intro__signature">{{ . }}</div>
         {{ end }}
-      </div>
-      <form class="home-search" action="{{ "search/" | relURL }}" method="get" role="search">
-        <label class="home-search__label" for="home-search-query">Search notes</label>
-        <input
-          id="home-search-query"
-          class="home-search__input"
-          type="search"
-          name="q"
-          placeholder="Search notes"
-          autocomplete="off"
-        />
-      </form>
-    </section>
+      </header>
 
-    <section class="home-notes" id="latest-notes" aria-labelledby="latest-notes-title">
-      <div class="home-section-heading">
-        <h2 id="latest-notes-title">Notes</h2>
-        <nav class="home-topic-list" aria-label="Note topics">
-          {{ range $topic := slice "agent" "security" "面经" "题解" }}
-            <button class="home-topic" type="button" data-topic="{{ $topic | lower }}" aria-pressed="false">{{ $topic }}</button>
+      <section class="home-panel" data-home-panel="all" aria-labelledby="home-panel-all-title">
+        <div class="home-panel__heading">
+          <h2 id="home-panel-all-title">All Notes</h2>
+          <span>{{ len $notes }} notes</span>
+        </div>
+        <div class="home-entry-list">
+          {{ range $notes }}
+            <a class="home-entry-card" href="{{ .RelPermalink }}">
+              <time class="home-entry-card__date" datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format $dateFormat }}</time>
+              <span class="home-entry-card__body">
+                <span class="home-entry-card__title">{{ .Title }}</span>
+                <span class="home-entry-card__summary">
+                  {{ with .Params.summary }}{{ . }}{{ else }}{{ .Summary | plainify | truncate 110 }}{{ end }}
+                </span>
+              </span>
+            </a>
           {{ end }}
-        </nav>
-      </div>
+        </div>
+      </section>
 
-      <div class="home-note-grid" data-home-note-grid>
-        {{ range $notes }}
+      {{ range $topic := $topics }}
+        {{ $matches := slice }}
+        {{ range $note := $notes }}
           {{ $tagList := slice }}
-          {{ range .Params.tags }}
+          {{ range $note.Params.tags }}
             {{ $tagList = $tagList | append (. | lower) }}
           {{ end }}
-          <article class="home-note-card" data-note-card data-tags="{{ delimit $tagList " " }}">
-            <a class="home-note-card__link" href="{{ .RelPermalink }}" aria-label="{{ .Title }}"></a>
-            <div class="home-note-card__meta">
-              {{ with .Params.tags }}
-                <span>{{ delimit . " · " }}</span>
-              {{ end }}
-              <span>{{ .Date.Format ($.Site.Params.indexDateFormat | default "2006-01-02") }}</span>
-            </div>
-            <h3 class="home-note-card__title">
-              <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-            </h3>
-            {{ with .Params.summary }}
-              <p class="home-note-card__summary">{{ . }}</p>
-            {{ else }}
-              <p class="home-note-card__summary">{{ .Summary | plainify | truncate 110 }}</p>
+          {{ $isMatch := false }}
+          {{ range $topic.tags }}
+            {{ if in $tagList (. | lower) }}
+              {{ $isMatch = true }}
             {{ end }}
-          </article>
+          {{ end }}
+          {{ if $isMatch }}
+            {{ $matches = $matches | append $note }}
+          {{ end }}
         {{ end }}
-      </div>
-    </section>
 
-    <section class="home-projects-placeholder" aria-labelledby="home-projects-title">
-      <div class="home-section-heading">
-        <h2 id="home-projects-title">Projects</h2>
-        <span class="home-projects-placeholder__status">Coming later</span>
-      </div>
-      <div class="home-projects-placeholder__body">
-        项目区先保留低调占位。等项目资料、截图或复盘更完整后，再升级成精选项目卡片。
-      </div>
-    </section>
+        <section class="home-panel" data-home-panel="{{ $topic.key }}" aria-labelledby="home-panel-{{ $topic.key }}-title" hidden>
+          <div class="home-panel__heading">
+            <h2 id="home-panel-{{ $topic.key }}-title">{{ $topic.label }}</h2>
+            <span>{{ len $matches }} notes</span>
+          </div>
+          <div class="home-entry-list">
+            {{ range $matches }}
+              <a class="home-entry-card" href="{{ .RelPermalink }}">
+                <time class="home-entry-card__date" datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format $dateFormat }}</time>
+                <span class="home-entry-card__body">
+                  <span class="home-entry-card__title">{{ .Title }}</span>
+                  <span class="home-entry-card__summary">
+                    {{ with .Params.summary }}{{ . }}{{ else }}{{ .Summary | plainify | truncate 110 }}{{ end }}
+                  </span>
+                </span>
+              </a>
+            {{ else }}
+              <p class="home-panel__empty">这个分类暂时还没有文章。</p>
+            {{ end }}
+          </div>
+        </section>
+      {{ end }}
+    </main>
+
+    <aside class="home-about" aria-label="About">
+      <form class="home-about-search" action="{{ "search/" | relURL }}" method="get" role="search">
+        <label class="home-about-search__label" for="home-about-search-query">Search</label>
+        <div class="home-about-search__field">
+          <input
+            id="home-about-search-query"
+            class="home-about-search__input"
+            type="search"
+            name="q"
+            placeholder="Search notes"
+            autocomplete="off"
+          />
+          <button class="home-about-search__button" type="submit" aria-label="Search notes">
+            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+          </button>
+        </div>
+      </form>
+
+      <section class="home-about__section">
+        <h2>About</h2>
+        <div class="home-about__visual" aria-hidden="true"></div>
+        {{ with $about }}
+          <div class="home-about__content">{{ .Summary | plainify | truncate 180 }}</div>
+        {{ else }}
+          <div class="home-about__content">{{ .Site.Params.description }}</div>
+        {{ end }}
+      </section>
+
+      <section class="home-about__section home-about__section--focus">
+        <h2>目前关注</h2>
+        <ul class="home-focus-list">
+          <li>人工智能</li>
+          <li>机器学习系统</li>
+          <li>安全方向</li>
+          <li>Agent 学习与项目实践</li>
+        </ul>
+      </section>
+    </aside>
   </div>
-
-  <script>
-    (function () {
-      var maxVisibleCards = 6;
-
-      function setCardVisibility(cards, topic) {
-        var visibleCount = 0;
-
-        cards.forEach(function (card) {
-          var tags = (card.getAttribute("data-tags") || "").toLowerCase().split(/\s+/);
-          var matchesTopic = !topic || tags.indexOf(topic) !== -1;
-          var shouldShow = matchesTopic && visibleCount < maxVisibleCards;
-
-          card.hidden = !shouldShow;
-          if (shouldShow) {
-            visibleCount += 1;
-          }
-        });
-      }
-
-      function setActiveButton(buttons, activeButton) {
-        buttons.forEach(function (button) {
-          var isActive = button === activeButton;
-          button.classList.toggle("home-topic--active", isActive);
-          button.setAttribute("aria-pressed", isActive ? "true" : "false");
-        });
-      }
-
-      function initHomeNotes() {
-        var grid = document.querySelector("[data-home-note-grid]");
-        if (!grid) {
-          return;
-        }
-
-        var cards = Array.prototype.slice.call(grid.querySelectorAll("[data-note-card]"));
-        var buttons = Array.prototype.slice.call(document.querySelectorAll(".home-topic[data-topic]"));
-
-        setCardVisibility(cards, "");
-
-        buttons.forEach(function (button) {
-          button.addEventListener("click", function () {
-            var isActive = button.getAttribute("aria-pressed") === "true";
-            var topic = isActive ? "" : (button.getAttribute("data-topic") || "").toLowerCase();
-
-            setActiveButton(buttons, isActive ? null : button);
-            setCardVisibility(cards, topic);
-          });
-        });
-      }
-
-      if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", initHomeNotes);
-      } else {
-        initHomeNotes();
-      }
-    })();
-  </script>
 {{ end }}
