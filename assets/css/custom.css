@@ -1334,9 +1334,9 @@ html,
 
 .article-toc-panel__title {
   color: #1d1d1f;
-  font-size: 1.42rem;
+  font-size: 1.52rem;
   font-weight: 850;
-  line-height: 1.3;
+  line-height: 1.35;
   margin: 0;
 }
 
@@ -1359,17 +1359,17 @@ html,
 
 .article-toc-panel__nav {
   border-top: 1px solid #e5e5ea;
-  padding-top: 0.85rem;
+  padding-top: 1rem;
 }
 
 .article-toc-panel__nav ul ul {
-  margin-top: 0.2rem;
-  padding-left: 0.75rem;
+  margin-top: 0.32rem;
+  padding-left: 0.85rem;
 }
 
 .article-toc-panel__nav li {
-  line-height: 1.35;
-  margin: 0.08rem 0;
+  line-height: 1.42;
+  margin: 0.16rem 0;
 }
 
 .article-toc-panel__nav a {
@@ -1377,11 +1377,11 @@ html,
   border-radius: 8px;
   color: #515154 !important;
   display: flex;
-  font-size: 1.14rem;
-  font-weight: 700;
+  font-size: 1.28rem;
+  font-weight: 780;
   gap: 0.45rem;
   justify-content: space-between;
-  padding: 0.52rem 0.65rem;
+  padding: 0.68rem 0.78rem;
   text-decoration: none;
   transition:
     background-color 160ms ease,
@@ -1397,7 +1397,7 @@ html,
   color: #86868b;
   content: "›";
   flex: 0 0 auto;
-  font-size: 1.1rem;
+  font-size: 1.22rem;
   line-height: 1;
   margin-top: 0.1rem;
   transition: transform 160ms ease;
@@ -1415,8 +1415,9 @@ html,
 
 .article-toc-panel__nav ul ul a {
   color: #6e6e73 !important;
-  font-size: 1.06rem;
-  font-weight: 650;
+  font-size: 1.16rem;
+  font-weight: 700;
+  padding: 0.55rem 0.7rem;
 }
 
 .article-toc-panel__nav a:hover,
